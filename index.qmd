@@ -1,0 +1,27 @@
+---
+title: ""
+---
+
+# Interactive tools and resources for applied veterinary epidemiology
+
+This site is maintained by [Javier Guitian](https://www.rvc.ac.uk/about/our-people/javier-guitian) to share interactive apps and other resources for teaching, training, and use by animal health professionals. Additional materials may be added here over time.
+
+---
+
+## Disclaimer
+These resources are provided for educational and professional use.  
+They are maintained on a personal basis and should not be considered official institutional materials.
+
+---
+
+*Developed by Javier Guitian (Royal Veterinary College). Please acknowledge if reused.*
+
+
+---
+
+This is a Quarto website.
+
+To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+
+```{}
+```

@@ -1,0 +1,19 @@
+project:
+  type: website
+
+website:
+  title: "VetEpi Resources"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: apps.qmd
+        text: Apps
+    right:
+      - text: "Maintained by Javier Guitian"
+        href: "https://www.rvc.ac.uk/about/our-people/javier-guitian"
+
+format:
+  html:
+    theme: cosmo
+    toc: false

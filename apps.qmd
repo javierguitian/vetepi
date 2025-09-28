@@ -1,0 +1,32 @@
+---
+title: "Apps"
+---
+
+# Interactive Apps
+
+Here you’ll find links to the suite of interactive Shiny apps:
+
+---
+
+## [Incidence Rate and Risk Simulator](https://javierguitian.shinyapps.io/incidence-rate-risk/)
+*Interactive simulator showing how incidence rate and incidence risk are related, including the effects of entries and losses from the population.*
+
+---
+
+## [Predictive Value Calculator](https://javierguitian.shinyapps.io/predictive-value-calculator/)
+*Calculates positive and negative predictive values of diagnostic tests across different prevalence levels, illustrating how predictive values depend on context.*
+
+---
+
+## [Herd Sensitivity Calculator](https://javierguitian.shinyapps.io/herd-sensitivity-calculator/)
+*Estimates the probability of detecting infection in a herd given the test sensitivity, within-herd prevalence, and number of animals sampled.*
+
+---
+
+## [Herd Detection Calculator](https://javierguitian.shinyapps.io/herd-detection-calculator/)
+*Quantifies the likelihood of detecting at least one positive herd in a population under different surveillance sampling designs.*
+
+---
+
+## [Herd Prevalence Estimator](https://javierguitian.shinyapps.io/herd-prevalence-estimator/)
+*Estimates herd-level prevalence from survey data, using exact or approximate confidence intervals depending on population and sample size, with visualizations of observed and projected precision.*

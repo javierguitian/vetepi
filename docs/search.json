@@ -1,0 +1,58 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Interactive tools and resources for applied veterinary epidemiology",
+    "section": "",
+    "text": "This site is maintained by Javier Guitian to share interactive apps and other resources for teaching, training, and use by animal health professionals. Additional materials may be added here over time.\n\n\n\nThese resources are provided for educational and professional use.\nThey are maintained on a personal basis and should not be considered official institutional materials.\n\nDeveloped by Javier Guitian (Royal Veterinary College). Please acknowledge if reused.\n\nThis is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites."
+  },
+  {
+    "objectID": "index.html#disclaimer",
+    "href": "index.html#disclaimer",
+    "title": "Interactive tools and resources for applied veterinary epidemiology",
+    "section": "",
+    "text": "These resources are provided for educational and professional use.\nThey are maintained on a personal basis and should not be considered official institutional materials.\n\nDeveloped by Javier Guitian (Royal Veterinary College). Please acknowledge if reused.\n\nThis is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites."
+  },
+  {
+    "objectID": "apps.html",
+    "href": "apps.html",
+    "title": "Apps",
+    "section": "",
+    "text": "Here you’ll find links to the suite of interactive Shiny apps:\n\n\n\nInteractive simulator showing how incidence rate and incidence risk are related, including the effects of entries and losses from the population.\n\n\n\n\nCalculates positive and negative predictive values of diagnostic tests across different prevalence levels, illustrating how predictive values depend on context.\n\n\n\n\nEstimates the probability of detecting infection in a herd given the test sensitivity, within-herd prevalence, and number of animals sampled.\n\n\n\n\nQuantifies the likelihood of detecting at least one positive herd in a population under different surveillance sampling designs.\n\n\n\n\nEstimates herd-level prevalence from survey data, using exact or approximate confidence intervals depending on population and sample size, with visualizations of observed and projected precision."
+  },
+  {
+    "objectID": "apps.html#incidence-rate-and-risk-simulator",
+    "href": "apps.html#incidence-rate-and-risk-simulator",
+    "title": "Apps",
+    "section": "",
+    "text": "Interactive simulator showing how incidence rate and incidence risk are related, including the effects of entries and losses from the population."
+  },
+  {
+    "objectID": "apps.html#predictive-value-calculator",
+    "href": "apps.html#predictive-value-calculator",
+    "title": "Apps",
+    "section": "",
+    "text": "Calculates positive and negative predictive values of diagnostic tests across different prevalence levels, illustrating how predictive values depend on context."
+  },
+  {
+    "objectID": "apps.html#herd-sensitivity-calculator",
+    "href": "apps.html#herd-sensitivity-calculator",
+    "title": "Apps",
+    "section": "",
+    "text": "Estimates the probability of detecting infection in a herd given the test sensitivity, within-herd prevalence, and number of animals sampled."
+  },
+  {
+    "objectID": "apps.html#herd-detection-calculator",
+    "href": "apps.html#herd-detection-calculator",
+    "title": "Apps",
+    "section": "",
+    "text": "Quantifies the likelihood of detecting at least one positive herd in a population under different surveillance sampling designs."
+  },
+  {
+    "objectID": "apps.html#herd-prevalence-estimator",
+    "href": "apps.html#herd-prevalence-estimator",
+    "title": "Apps",
+    "section": "",
+    "text": "Estimates herd-level prevalence from survey data, using exact or approximate confidence intervals depending on population and sample size, with visualizations of observed and projected precision."
+  }
+]

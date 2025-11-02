@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.24">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Javier Guitian">
+
+<title>Herd Sensitivity - Technical Notes – VetEpi Resources</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-ffa9a6279353761231ec249df0a7fdd3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">VetEpi Resources</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../apps.html"> 
+<span class="menu-text">Apps</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://www.rvc.ac.uk/about/our-people/javier-guitian"> 
+<span class="menu-text">Maintained by Javier Guitian</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#concept-of-herd-sensitivity" id="toc-concept-of-herd-sensitivity" class="nav-link" data-scroll-target="#concept-of-herd-sensitivity"><span class="header-section-number">2</span> Concept of Herd Sensitivity</a></li>
+  <li><a href="#exact-hypergeometric-formulation" id="toc-exact-hypergeometric-formulation" class="nav-link" data-scroll-target="#exact-hypergeometric-formulation"><span class="header-section-number">3</span> Exact (Hypergeometric) Formulation</a></li>
+  <li><a href="#approximate-binomial-formulation" id="toc-approximate-binomial-formulation" class="nav-link" data-scroll-target="#approximate-binomial-formulation"><span class="header-section-number">4</span> Approximate (Binomial) Formulation</a></li>
+  <li><a href="#from-sampling-probabilities-to-herd-sensitivity" id="toc-from-sampling-probabilities-to-herd-sensitivity" class="nav-link" data-scroll-target="#from-sampling-probabilities-to-herd-sensitivity"><span class="header-section-number">5</span> From Sampling Probabilities to Herd Sensitivity</a></li>
+  <li><a href="#illustration-and-summary" id="toc-illustration-and-summary" class="nav-link" data-scroll-target="#illustration-and-summary"><span class="header-section-number">6</span> Illustration and summary</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Herd Sensitivity - Technical Notes</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Javier Guitian </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
+<p>These notes explain the epidemiological context and mathematical principles underlying the concept of <em>Herd Sensitivity</em>.&nbsp;They have been developed to be used alongside the <a href="https://javierguitian.shinyapps.io/herd-sensitivity-calculator/"><em>Herd Sensitivity Calculator App</em></a> and cover the principles of sampling without replacement, described by the hypergeometric distribution, together with its binomial approximation. These distributions underpin the <strong>exact</strong> and <strong>approximate</strong> methods to calculate herd sensitivity.</p>
+<hr>
+</section>
+<section id="concept-of-herd-sensitivity" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="concept-of-herd-sensitivity"><span class="header-section-number">2</span> Concept of Herd Sensitivity</h2>
+<p>In most veterinary activities involving production animals, the unit of interest is the herd or flock. Decisions regarding the implementation of control measures such as animal movement restrictions, further disease investigations, or culling, are often based on whether the herd, rather than the individual animal, is infected. As a result, surveillance programmes and field investigations usually aim to assess whether a herd or flock contains one or more infected animals. Because animal health surveillance often targets epidemiological units larger than the individual animal, the <em>World Organization for Animal Health (WOAH) Terrestrial Animal Health Code</em> defines in Article 1.4.1 <a href="https://www.woah.org/fileadmin/Home/eng/Health_standards/tahc/current/en_chapitre_surveillance_general.htm">(<em>Animal Health Surveillance</em>)</a> the <strong>sensitivity of a surveillance system</strong> as the proportion of infected <em>sampling units</em> that are correctly identified as positive, where a sampling unit may be an individual or a group of animals. This definition acknowledges that, for practical and epidemiological reasons, surveillance is frequently implemented at levels other than the individual animal, such as herds, flocks, or other epidemiological units. For this reason, understanding the concept of herd sensitivity is essential for designing and interpreting surveillance activities.</p>
+<p>Most infectious diseases tend to cluster or aggregate within herds where animals are in close contact and share the same environmnt and husbandry practices. Herds affected by a given disease will therefore often have more than a single infected animal, and for highly infectious diseases, a large proportion of the herd may be affected. Although complete certainty about a herd’s infection status would require testing all animals, it is usually possible to achieve a high level of confidence by testing only a subset of them.</p>
+<p>The <strong>Herd sensitivity</strong> (<span class="math inline">\(HSe\)</span>) represents the probability of detecting at least one positive animal if the herd is truly infected.</p>
+<p><span class="math inline">\(HSe = P(\text{at least one animal tests positive} \mid \text{herd is infected}) =  1 - P(\text{all animals test negative} \mid \text{herd is infected})\)</span></p>
+<p>It depends on:</p>
+<ul>
+<li>Herd size (<span class="math inline">\(N\)</span>)</li>
+<li>Number of animals tested (<span class="math inline">\(n\)</span>)</li>
+<li>Test sensitivity (<span class="math inline">\(Se\)</span>) and specificity (<span class="math inline">\(Sp\)</span>)</li>
+<li>Within-herd prevalence (<span class="math inline">\(p_{wh}\)</span>)</li>
+</ul>
+<p>In the sections that follow, we will express this relationship formally using probability theory, deriving the expressions for <span class="math inline">\(HSe\)</span> based on the hypergeometric distribution (for sampling without replacement) and showing how the binomial approximation can be applied when appropriate.</p>
+<hr>
+</section>
+<section id="exact-hypergeometric-formulation" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="exact-hypergeometric-formulation"><span class="header-section-number">3</span> Exact (Hypergeometric) Formulation</h2>
+<p>The <strong>hypergeometric distribution</strong> describes the probability of obtaining a certain number of “successes” in a sample drawn <strong>without replacement</strong> from a finite population. This mirrors the process of randomly selecting animals from a herd where some may be infected, ensuring that no animal is sampled more than once (i.e.&nbsp;no replacement). The hypergeometric distribution can therefore be used to determine the probability of selecting a given number of infected animals from a herd of known size, for a specified number of animals sampled and an assumed within-herd prevalence of infection.</p>
+<p>If we assume a within-herd (design) prevalence (<span class="math inline">\(p\_{wh}\)</span>), this represents the expected proportion of infected animals in a herd that is truly infected. For a herd of size (<span class="math inline">\(N\)</span>), this corresponds to a fixed number of infected animals: <span class="math inline">\(I = p_{wh} \times N\)</span></p>
+<p>Note that for very small herds, some values of the within-herd prevalence may not be feasible. Since the minimum possible number of infected animals in an infected herd is one, the lowest meaningful within-herd prevalence is <span class="math inline">\(1/N\)</span>. In practice, if the assumed prevalence corresponds to fewer than one infected animal, calculations should be based on one infected animal.</p>
+<p>The probability of selecting exactly (<span class="math inline">\(i\)</span>) infected animals when (<span class="math inline">\(n\)</span>) are sampled without replacement from a herd of size (<span class="math inline">\(N\)</span>) in which (<span class="math inline">\(I\)</span>) animals are infected is given by the probability mass function of the hypergeometric distribution:</p>
+<p><span class="math display">\[
+P(X = i) =
+\frac{\binom{I}{i}\,\binom{N - I}{\,n - i\,}}{\binom{N}{n}},
+\qquad i = 0, 1, \ldots, \min(I, n)
+\]</span></p>
+<p>In this expression, <span class="math inline">\(\binom{I}{i}\)</span> represents all possible combinations in which <span class="math inline">\(i\)</span> infected animals can be chosen from the <span class="math inline">\(I\)</span> infected animals present in the herd. In other words, it gives the number of distinct subsets of size <span class="math inline">\(i\)</span> that can be formed from the total <span class="math inline">\(I\)</span> infected animals, regardless of order. Each subset corresponds to one possible way in which the sample could include exactly <span class="math inline">\(i\)</span> infected animals. For example, if there are 4 infected animals in a herd (A, B, C, D), there are <span class="math inline">\(\binom{4}{2}=6\)</span> different possible combinations of two infected animals that could be sampled:</p>
+<p>(A, B), (A, C), (A, D), (B, C), (B, D), and (C, D).</p>
+<p>Similarly, <span class="math inline">\(\binom{N-I}{n-i}\)</span> represents all possible combinations in which <span class="math inline">\(n-i\)</span> uninfected animals can be chosen from the <span class="math inline">\(N-I\)</span> uninfected animals present in the herd. The product of these two terms: <span class="math inline">\(\binom{I}{i}\,\binom{N - I}{\,n - i\,}\)</span> gives the total number of ways to obtain <span class="math inline">\(i\)</span> infected and <span class="math inline">\(n-i\)</span> uninfected animals in a sample of size <span class="math inline">\(n\)</span>, randomly obtained from a herd o size <span class="math inline">\(N\)</span> in which <span class="math inline">\(I\)</span> animals are infected.</p>
+<p>By dividing this quantity by the total number of possible samples of size <span class="math inline">\(n\)</span> that can be drawn from a herd of size <span class="math inline">\(N\)</span>, <span class="math inline">\(\binom{N}{n}\)</span>, we obtain the probability that a randomly selected sample of <span class="math inline">\(n\)</span> animals will contain exactly <span class="math inline">\(i\)</span> infected individuals.</p>
+<hr>
+</section>
+<section id="approximate-binomial-formulation" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="approximate-binomial-formulation"><span class="header-section-number">4</span> Approximate (Binomial) Formulation</h2>
+<p>In the previous section we saw how the hypergeometric distribution can be used to determine the probability that a random sample of a certain size contains a specific number of infected animals. A key feature of the hypergeometric distribution is that it assumes sampling without replacement, once an animal has been selected, it cannot be selected again. In practical terms, this means that the effective within-herd prevalence changes slightly with each animal sampled, because the composition of the remaining herd is altered.</p>
+<p>The hypergeometric formulation fully accounts for this and therefore provides an exact description of the sampling process. However, the calculations can become computationally intensive, especially for large herds. When herd size increases or when the number of sampled animals represents only a small fraction of the total, the effect of sampling without replacement becomes negligible. Under these conditions, it is reasonable to assume that the probability of selecting an infected animal remains effectively constant from one draw to the next, with each sampled animal having probability <span class="math inline">\(p_{wh}\)</span> of being infected.</p>
+<p>This simplification leads to the <strong>binomial approximation</strong>, in which the number of infected animals in a sample of size <span class="math inline">\(n\)</span> is assumed to follow a binomial distribution with parameters <span class="math inline">\(n\)</span> and <span class="math inline">\(p_{wh}\)</span>. The probability mass function of the binomial distribution gives the probability of obtaining <span class="math inline">\(X\)</span> “successes” in <span class="math inline">\(n\)</span> independent trials, when the probability of success in a single trial is <span class="math inline">\(p\)</span>. In this context, it represents the probability that <span class="math inline">\(i\)</span> animals are infected when <span class="math inline">\(n\)</span> animals are sampled from a herd and each animal has probability <span class="math inline">\(p_{wh}\)</span> of being infected:</p>
+<p>This simplification leads to the binomial approximation, in which the number of infected animals in a sample of size <span class="math inline">\(n\)</span> follows a <strong>binomial distribution</strong> with parameters <span class="math inline">\(n\)</span> and <span class="math inline">\(p_{wh}\)</span>:</p>
+<p><span class="math display">\[
+P(X = i) \approx \binom{n}{i}\,p_{wh}^{\,i}\,(1 - p_{wh})^{\,n - i},
+\qquad i = 0, 1, \ldots, n.
+\]</span></p>
+<p>The probability that the sample contains at least one infected animal can be obtained as the complement of the probability that no infected animals are included in the sample. The probability of sampling zero infected animals is given by the binomial formula with <span class="math inline">\(i = 0\)</span>:</p>
+<p><span class="math display">\[
+P(X = 0) = \binom{n}{0} \, p_{wh}^{\,0} \, (1 - p_{wh})^{\,n - 0} = (1 - p_{wh})^{\,n}
+\]</span></p>
+<p>Therefore, the probability that the sample contains at least one infected animal is:</p>
+<p><span class="math display">\[
+P(X \ge 1) = 1 - P(X = 0) \approx 1 - (1 - p_{wh})^{\,n}
+\]</span></p>
+<hr>
+</section>
+<section id="from-sampling-probabilities-to-herd-sensitivity" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="from-sampling-probabilities-to-herd-sensitivity"><span class="header-section-number">5</span> From Sampling Probabilities to Herd Sensitivity</h2>
+<p>The probabilities derived in the previous sections describe the likelihood that a random sample of animals from an infected herd contains one or more infected individuals. In practice, animals are not classified as infected or uninfected directly, but according to the result of a diagnostic test with certain sensitivity <span class="math inline">\(Se\)</span> and specificity <span class="math inline">\(Sp\)</span>. To obtain the herd sensitivity (<span class="math inline">\(HSe\)</span>), i.e.&nbsp;the probability that at least one animal tests positive if the herd is truly infected, we must account for both the sampling process and the performance of the diagnostic test summarized by its sensitivity and specificity.</p>
+<p>Once a sample is obtained from an <strong>infected herd</strong>, the probability that all <span class="math inline">\(n\)</span> sampled animals test negative requires that:</p>
+<ul>
+<li><p>Among the <span class="math inline">\(i\)</span> infected animals in the sample, each yields a negative result with probability <span class="math inline">\((1 - Se)\)</span>.</p></li>
+<li><p>Among the <span class="math inline">\(n - i\)</span> uninfected animals in the sample, each yields a negative result with probability <span class="math inline">\(Sp\)</span>.</p></li>
+</ul>
+<p>If exactly <span class="math inline">\(i\)</span> infected animals are included among the <span class="math inline">\(n\)</span> sampled, the probability that all sampled animals test negative is:</p>
+<p><span class="math display">\[
+(1 - Se)^{i} \, Sp^{\,n - i}
+\]</span></p>
+<p><em>Exact (hypergeometric) formulation</em></p>
+<p>Using the hypergeometric sampling probabilities from Section 3, the probability that all sampled animals test negative, given <span class="math inline">\(I\)</span> infected animals in the herd, is:</p>
+<p><span class="math display">\[
+P(\text{all negative} \mid I)
+= \sum_{i = 0}^{\min(I, n)}
+\frac{\binom{I}{i} \, \binom{N - I}{\,n - i\,}}{\binom{N}{n}} \,
+(1 - Se)^{i} \, Sp^{\,n - i}.
+\]</span></p>
+<p>The above expression calculates, for each possible number of infected animals in the sample (<span class="math inline">\(i = 0, 1, \ldots, \min(I, n)\)</span>), the product of two terms: (1) the probability of selecting exactly <span class="math inline">\(i\)</span> infected animals, given by the hypergeometric distribution, and (2) the probability that all <span class="math inline">\(n\)</span> sampled animals test negative, given that <span class="math inline">\(i\)</span> of them are infected and <span class="math inline">\(n - i\)</span> are uninfected. By summing over all possible values of <span class="math inline">\(i\)</span>, the expression accounts for every combination of infected and uninfected animals that could occur in the sample and yields the overall probability that all tested animals return negative results, given <span class="math inline">\(I\)</span> infected animals in the herd.</p>
+<p>If the within-herd (design) prevalence is <span class="math inline">\(p_{wh}\)</span>, we take a fixed number of infected animals <span class="math inline">\(I = p_{wh}N\)</span> (rather than treating <span class="math inline">\(I\)</span> as random). Under this assumption, the herd sensitivity under the exact (hypergeometric) formulation is:</p>
+<p><span class="math display">\[
+HSe_{\text{exact}} = 1 - P(\text{all negative} \mid I = p_{wh} \, N)
+\]</span></p>
+<p><em>Approximate (binomial) formulation</em></p>
+<p>Under the binomial approximation from Section 4, each draw can be treated as having probability <span class="math inline">\(p_{wh}\)</span> of selecting an infected animal. A sampled animal yields a positive test either because it is infected and tests positive (<span class="math inline">\(Se\)</span>), or because it is uninfected and yields a false positive (<span class="math inline">\(1 - Sp\)</span>). Thus, the per-animal probability of a positive test (<span class="math inline">\(p_{+}\)</span>) is:</p>
+<p><span class="math display">\[
+p_{+} = Se \, p_{wh} + (1 - Sp) \, (1 - p_{wh})
+\]</span></p>
+<p>Assuming independence across draws, the probability that all <span class="math inline">\(n\)</span> sampled animals test negative is <span class="math inline">\((1 - p_{+})^{n}\)</span>, and therefore:</p>
+<p><span class="math display">\[
+HSe_{\text{approx}} = 1 - (1 - p_{+})^{\,n}
+= 1 - \big[ 1 - (Se \, p_{wh} + (1 - Sp)(1 - p_{wh})) \big]^{\,n}
+\]</span></p>
+<p>In this section, we have shown how herd sensitivity can be calculated by combining the sampling process and the diagnostic test performance, using either the exact (hypergeometric) or the approximate (binomial) formulation. The exact expression accounts for sampling without replacement and a fixed number of infected animals <span class="math inline">\(I = p_{wh} N\)</span>, while the approximate expression is accurate when the sampling fraction <span class="math inline">\(n / N\)</span> is small and provides a simple analytical expression based on the per-animal probability of testing positive <span class="math inline">\(p_{+}\)</span>. Both formulations describe the same underlying process and yield similar results when <span class="math inline">\(n\)</span> is much smaller than <span class="math inline">\(N\)</span>, with the exact version preferred when herd sizes are small or sampling intensity is high. In the final section, we explore how the two approaches compare through a simple illustration implemented in R.</p>
+</section>
+<section id="illustration-and-summary" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="illustration-and-summary"><span class="header-section-number">6</span> Illustration and summary</h2>
+<p>The figure below compares the <em>exact</em> (hypergeometric) and <em>approximate</em> (binomial) calculations of herd sensitivity across increasing sample sizes.<br>
+The difference between both approaches becomes negligible when the herd is large and the sampling fraction (<span class="math inline">\(n/N\)</span>) is small, but can be noticeable for small herds or large sampling fractions.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Parameters</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>Se <span class="ot">&lt;-</span> <span class="fl">0.9</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>Sp <span class="ot">&lt;-</span> <span class="fl">0.99</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>pwh <span class="ot">&lt;-</span> <span class="fl">0.1</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>N  <span class="ot">&lt;-</span> <span class="dv">50</span>                <span class="co"># moderate herd size</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>n  <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>N</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Exact (deterministic I)</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>herd_sensitivity_exact <span class="ot">&lt;-</span> <span class="cf">function</span>(Se, Sp, n, N, pwh) {</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">min</span>(n, N)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  I <span class="ot">&lt;-</span> <span class="fu">round</span>(pwh <span class="sc">*</span> N)                   <span class="co"># fixed number of infected animals</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  i_vals <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span><span class="fu">min</span>(n, I)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  hg <span class="ot">&lt;-</span> <span class="fu">dhyper</span>(i_vals, <span class="at">m =</span> I, <span class="at">n =</span> N <span class="sc">-</span> I, <span class="at">k =</span> n)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  p_all_neg <span class="ot">&lt;-</span> <span class="fu">sum</span>(hg <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> Se)<span class="sc">^</span>i_vals <span class="sc">*</span> Sp<span class="sc">^</span>(n <span class="sc">-</span> i_vals))</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="dv">1</span> <span class="sc">-</span> p_all_neg</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Approximate (binomial)</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>herd_sensitivity_approx <span class="ot">&lt;-</span> <span class="cf">function</span>(Se, Sp, n, pwh) {</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="dv">1</span> <span class="sc">-</span> (<span class="dv">1</span> <span class="sc">-</span> (Se <span class="sc">*</span> pwh <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">-</span> Sp) <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> pwh)))<span class="sc">^</span>n</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute both</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>HSe_exact  <span class="ot">&lt;-</span> <span class="fu">sapply</span>(n, herd_sensitivity_exact, <span class="at">Se =</span> Se, <span class="at">Sp =</span> Sp, <span class="at">N =</span> N, <span class="at">pwh =</span> pwh)</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>HSe_approx <span class="ot">&lt;-</span> <span class="fu">sapply</span>(n, herd_sensitivity_approx, <span class="at">Se =</span> Se, <span class="at">Sp =</span> Sp, <span class="at">pwh =</span> pwh)</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot comparison</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(n, HSe_exact, <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">"darkblue"</span>,</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">xlab =</span> <span class="st">"Number of animals sampled (n)"</span>,</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Herd sensitivity"</span>, <span class="at">main =</span> <span class="st">"Exact vs Approximate Herd Sensitivity"</span>)</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(n, HSe_approx, <span class="at">col =</span> <span class="st">"tomato"</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="fl">0.95</span>, <span class="at">lty =</span> <span class="dv">3</span>)</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomright"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Exact (hypergeometric)"</span>, <span class="st">"Approximate (binomial)"</span>),</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"darkblue"</span>,<span class="st">"tomato"</span>), <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), <span class="at">bty =</span> <span class="st">"n"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="herd_sensitivity_notes_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>For small herds or when a large proportion of animals is sampled, the exact curve (solid blue) sits slightly below the approximate one (dashed red), because the hypergeometric formulation correctly accounts for sampling without replacement. As herd size increases or the sampling fraction decreases, both curves converge, confirming that the binomial model provides a reliable and much simpler approximation under most field conditions.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
